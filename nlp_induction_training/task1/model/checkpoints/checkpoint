@@ -1,0 +1,2 @@
+model_checkpoint_path: "D:\\Python-text\\Neural Networks and Deep Learning\\nlp_induction_training\\task1/model/checkpoints\\best_validation"
+all_model_checkpoint_paths: "D:\\Python-text\\Neural Networks and Deep Learning\\nlp_induction_training\\task1/model/checkpoints\\best_validation"
