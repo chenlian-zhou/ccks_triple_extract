@@ -16,12 +16,7 @@
 ```
 该比赛一共提供了20多万标注质量很高的三元组，其中17万训练集，2万验证集和2万测试集，实体关系（schema）50个。
 
-&emsp;&emsp;在具体介绍笔者的思路和实战前，先介绍下本次任务的处理思路：
-![本次人物的总体思路](https://img-blog.csdnimg.cn/20200315105912758.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pjbGlhbjkx,size_16,color_FFFFFF,t_70)
 首先是对拿到的数据进行数据分析，包括统计每个句子的长度及三元组数量，每种关系的数量分布情况。接着，对数据单独走序列标注模型和关系分析模型。最后在提取三元组的时候，用Pipeline模型，先用序列标注模型预测句子中的实体，再对实体（加上句子）走关系分类模型，预测实体的关系，最后形成有效的三元组。
-
-&emsp;&emsp;接下来笔者将逐一介绍，项目结构图如下：
-![项目结构图](https://img-blog.csdnimg.cn/20200315112107112.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pjbGlhbjkx,size_16,color_FFFFFF,t_70)
 
 ### 数据分析
 &emsp;&emsp;我们能拿到的只有训练集和验证集，没有测试集。我们对训练集做数据分析，训练集数据文件为train_data.json。
@@ -91,9 +86,6 @@ max        25.000000     300.000000
 秘 O
 笈 O
 ```
-&emsp;&emsp;序列标注的模型采用ALBERT+Bi-LSTM+CRF，结构图如下：
-![序列标注模型结构图](https://img-blog.csdnimg.cn/20200315113946554.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pjbGlhbjkx,size_16,color_FFFFFF,t_70)
-模型方面的代码不再具体给出，有兴趣的同学可以参考文章[NLP（二十五）实现ALBERT+Bi-LSTM+CRF模型](https://blog.csdn.net/jclian91/article/details/104826655)，也可以参考文章最后给出的Github项目网址。
 
 &emsp;&emsp;模型设置文本最大长度为128，利用ALBERT做特征提取，在自己的电脑上用CPU训练5个epoch，结果如下：
 ```
@@ -139,11 +131,6 @@ macro avg     0.9621    0.9104    0.9355     70119
 22 李成桂$朝鲜$历史评价李氏##的创立并非太祖大王###一人之功﹐其五子李芳远功不可没
 ```
 因此，就会出现关系0（表示“未知”），这样我们在提取三元组的时候就可以略过这条关系，形成真正有用的三元组。
-
-&emsp;&emsp;因此，关系一共为51个（加上未知关系：0）。关系分类模型采用ALBERT+Bi-GRU+ATT，结构图如下：
-![关系分类模型图](https://img-blog.csdnimg.cn/20200315115506974.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2pjbGlhbjkx,size_16,color_FFFFFF,t_70)
-
-&emsp;&emsp;模型方面的代码不再具体给出，有兴趣的同学可以参考文章[NLP（二十一）人物关系抽取的一次实战](https://blog.csdn.net/jclian91/article/details/104380371)，也可以参考文章最后给出的Github项目网址。
 
 &emsp;&emsp;模型设置文本最大长度为128，利用ALBERT做特征提取，在自己的电脑上用CPU训练30个epoch（实际上，由于有early stopping机制，训练不到30个eopch），在验证集上的评估结果如下：
 
@@ -292,6 +279,8 @@ weighted avg       0.93      0.93      0.93     49506
 
 ### 参考网址
 
-1. NLP（二十五）实现ALBERT+Bi-LSTM+CRF模型：https://blog.csdn.net/jclian91/article/details/104826655 
-2. NLP（二十一）人物关系抽取的一次实战： https://blog.csdn.net/jclian91/article/details/104380371
-3. 基于DGCNN和概率图的轻量级信息抽取模型：https://spaces.ac.cn/archives/6671
+1.信息抽取实战：命名实体识别NER【ALBERT+Bi-LSTM模型 vs. ALBERT+Bi-LSTM+CRF模型】（附代码）：https://blog.csdn.net/weixin_42691585/article/details/107424028
+2.信息抽取实战：人物关系抽取【BERT模型】（附代码）：https://blog.csdn.net/weixin_42691585/article/details/107271784
+3.基于DGCNN和概率图的轻量级信息抽取模型: https://spaces.ac.cn/archives/6671
+4.利用关系抽取构建知识图谱的一次尝试： https://www.cnblogs.com/jclian91/p/11107323.html
+5.《知识图谱 方法、实践与应用》 王昊奋、漆桂林、陈华钧著，中国工信出版集团、电子工业出版社出版。
