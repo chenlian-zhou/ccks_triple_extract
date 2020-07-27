@@ -280,7 +280,11 @@ weighted avg       0.93      0.93      0.93     49506
 ### 参考网址
 
 1.信息抽取实战：命名实体识别NER【ALBERT+Bi-LSTM模型 vs. ALBERT+Bi-LSTM+CRF模型】（附代码）：https://blog.csdn.net/weixin_42691585/article/details/107424028
+
 2.信息抽取实战：人物关系抽取【BERT模型】（附代码）：https://blog.csdn.net/weixin_42691585/article/details/107271784
+
 3.基于DGCNN和概率图的轻量级信息抽取模型: https://spaces.ac.cn/archives/6671
+
 4.利用关系抽取构建知识图谱的一次尝试： https://www.cnblogs.com/jclian91/p/11107323.html
+
 5.《知识图谱 方法、实践与应用》 王昊奋、漆桂林、陈华钧著，中国工信出版集团、电子工业出版社出版。
